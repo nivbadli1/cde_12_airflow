@@ -1,0 +1,17 @@
+[2024-04-09T17:06:20.813+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: task_states_demo.successful_task scheduled__2023-09-29T00:00:00+00:00 [queued]>
+[2024-04-09T17:06:20.840+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: task_states_demo.successful_task scheduled__2023-09-29T00:00:00+00:00 [queued]>
+[2024-04-09T17:06:20.843+0000] {taskinstance.py:2193} INFO - Starting attempt 1 of 2
+[2024-04-09T17:06:20.882+0000] {taskinstance.py:2217} INFO - Executing <Task(BashOperator): successful_task> on 2023-09-29 00:00:00+00:00
+[2024-04-09T17:06:20.923+0000] {standard_task_runner.py:60} INFO - Started process 1635 to run task
+[2024-04-09T17:06:20.968+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'task_states_demo', 'successful_task', 'scheduled__2023-09-29T00:00:00+00:00', '--job-id', '273', '--raw', '--subdir', 'DAGS_FOLDER/task_states_demo.py', '--cfg-path', '/tmp/tmp5isol_o8']
+[2024-04-09T17:06:21.015+0000] {standard_task_runner.py:88} INFO - Job 273: Subtask successful_task
+[2024-04-09T17:06:21.798+0000] {task_command.py:423} INFO - Running <TaskInstance: task_states_demo.successful_task scheduled__2023-09-29T00:00:00+00:00 [running]> on host fe7355ff6de5
+[2024-04-09T17:06:22.311+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='your_email@example.com' AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='task_states_demo' AIRFLOW_CTX_TASK_ID='successful_task' AIRFLOW_CTX_EXECUTION_DATE='2023-09-29T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2023-09-29T00:00:00+00:00'
+[2024-04-09T17:06:22.399+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2024-04-09T17:06:22.420+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', 'echo "This is a successful task"']
+[2024-04-09T17:06:22.606+0000] {subprocess.py:86} INFO - Output:
+[2024-04-09T17:06:22.713+0000] {subprocess.py:93} INFO - This is a successful task
+[2024-04-09T17:06:22.753+0000] {subprocess.py:97} INFO - Command exited with return code 0
+[2024-04-09T17:06:23.084+0000] {taskinstance.py:1149} INFO - Marking task as SUCCESS. dag_id=task_states_demo, task_id=successful_task, execution_date=20230929T000000, start_date=20240409T170620, end_date=20240409T170623
+[2024-04-09T17:06:23.422+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2024-04-09T17:06:24.122+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check

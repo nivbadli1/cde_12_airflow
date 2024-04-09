@@ -1,0 +1,18 @@
+[2024-04-09T17:00:59.701+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ecommerce_sales_pipeline.extract_sales_data manual__2024-04-09T17:00:14.729175+00:00 [queued]>
+[2024-04-09T17:01:00.664+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ecommerce_sales_pipeline.extract_sales_data manual__2024-04-09T17:00:14.729175+00:00 [queued]>
+[2024-04-09T17:01:00.727+0000] {taskinstance.py:2193} INFO - Starting attempt 1 of 4
+[2024-04-09T17:01:00.969+0000] {taskinstance.py:2217} INFO - Executing <Task(PythonOperator): extract_sales_data> on 2024-04-09 17:00:14.729175+00:00
+[2024-04-09T17:01:01.240+0000] {standard_task_runner.py:60} INFO - Started process 1265 to run task
+[2024-04-09T17:01:01.327+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'ecommerce_sales_pipeline', 'extract_sales_data', 'manual__2024-04-09T17:00:14.729175+00:00', '--job-id', '203', '--raw', '--subdir', 'DAGS_FOLDER/ecommerce_sales_pipeline.py', '--cfg-path', '/tmp/tmp99vzu6pu']
+[2024-04-09T17:01:01.371+0000] {standard_task_runner.py:88} INFO - Job 203: Subtask extract_sales_data
+[2024-04-09T17:01:02.265+0000] {task_command.py:423} INFO - Running <TaskInstance: ecommerce_sales_pipeline.extract_sales_data manual__2024-04-09T17:00:14.729175+00:00 [running]> on host fe7355ff6de5
+[2024-04-09T17:01:03.581+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='your_email@example.com' AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ecommerce_sales_pipeline' AIRFLOW_CTX_TASK_ID='extract_sales_data' AIRFLOW_CTX_EXECUTION_DATE='2024-04-09T17:00:14.729175+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-04-09T17:00:14.729175+00:00'
+[2024-04-09T17:01:04.580+0000] {python.py:202} INFO - Done. Returned value was:    order_date    product  quantity  price
+0  2023-01-01  Product A        10  20.50
+1  2023-01-02  Product B         5  15.75
+2  2023-01-03  Product C         8  22.00
+3  2023-01-04  Product A        12  20.50
+4  2023-01-05  Product B         7  15.75
+[2024-04-09T17:01:05.959+0000] {taskinstance.py:1149} INFO - Marking task as SUCCESS. dag_id=ecommerce_sales_pipeline, task_id=extract_sales_data, execution_date=20240409T170014, start_date=20240409T170100, end_date=20240409T170105
+[2024-04-09T17:01:07.055+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2024-04-09T17:01:07.854+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check
