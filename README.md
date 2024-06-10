@@ -1,5 +1,3 @@
-#Introduction to Airflow
-
 ## Airflow Docker Compose Installation Guide
 
 Follow these steps to set up Apache Airflow using Docker Compose:
