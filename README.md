@@ -1,5 +1,73 @@
 #Introduction to Airflow
 
+## Airflow Docker Compose Installation Guide
+
+Follow these steps to set up Apache Airflow using Docker Compose:
+
+1. **Clone the Repository**
+   Clone the Airflow Docker Compose repository to your local machine.
+
+2. **Set Up Airflow Directories and Environment**
+   Navigate to the cloned repository's directory and run the following commands:
+
+   ```bash
+   mkdir -p ./dags ./logs ./plugins ./config
+   echo -e "AIRFLOW_UID=$(id -u)" > .env
+    ```
+    These commands create the necessary directories for Airflow and set the AIRFLOW_UID environment variable to your user ID.
+
+3. **Initialize Airflow**
+    Run the following command to initialize the Airflow database and create the admin user:
+    ```bash
+    docker compose up airflow-init
+    ```
+
+    After initialization is complete, you should see a message like this:
+
+    ```
+    airflow-init_1       | Upgrades done
+    airflow-init_1       | Admin user airflow created
+    airflow-init_1       | 2.9.2
+    start_airflow-init_1 exited with code 0
+    ```
+
+    This indicates that the Airflow admin user has been created successfully.
+
+4. **Start Airflow Services**
+    Start all Airflow services by running:
+    ```bash
+    docker compose up 
+    ```
+    This command will start the Airflow webserver, scheduler, worker, PostgreSQL database, and Redis queue.
+
+5. **Verify Running Containers**
+    To verify that all containers are running correctly, use the following command:
+    ```bash
+    docker compose ps
+    ```
+    This command will start the Airflow webserver, scheduler, worker, PostgreSQL database, and Redis queue.
+
+
+```bash
+CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS                    PORTS                              NAMES
+247ebe6cf87a   apache/airflow:2.9.2   "/usr/bin/dumb-init …"   3 minutes ago    Up 3 minutes (healthy)    8080/tcp                           compose_airflow-worker_1
+ed9b09fc84b1   apache/airflow:2.9.2   "/usr/bin/dumb-init …"   3 minutes ago    Up 3 minutes (healthy)    8080/tcp                           compose_airflow-scheduler_1
+7cb1fb603a98   apache/airflow:2.9.2   "/usr/bin/dumb-init …"   3 minutes ago    Up 3 minutes (healthy)    0.0.0.0:8080->8080/tcp             compose_airflow-webserver_1
+74f3bbe506eb   postgres:13            "docker-entrypoint.s…"   18 minutes ago   Up 17 minutes (healthy)   5432/tcp                           compose_postgres_1
+0bd6576d23cb   redis:latest           "docker-entrypoint.s…"   10 hours ago     Up 17 minutes (healthy)   0.0.0.0:6379->6379/tcp             compose_redis_1
+```
+
+6. **Access Airflow UI**
+
+    Open your web browser and go to:
+    ```bash
+    http://localhost:8080
+    ```
+    You will see the Airflow web interface. Use the default username airflow and password airflow to log in.
+
+    With these steps, you have successfully set up Apache Airflow using Docker Compose. You can now start creating and managing your data pipelines using the Airflow UI or by placing your DAG files in the ./dags directory.
+        
+
 ## Exercise: Creating a Basic DAG with Python and Bash Operators
 
 For this exercise, we'll focus on a real-world data engineering scenario where you'll need to create a data pipeline to extract, transform, and load sales data from a CSV file into a data warehouse.
