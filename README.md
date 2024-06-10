@@ -1,6 +1,4 @@
-# Big Data Lecture: Introduction to Airflow
-
-Welcome, data engineering students! In this 3-hour lecture, we'll dive into the world of Apache Airflow, a powerful open-source platform for building, scheduling, and monitoring data pipelines.
+#Introduction to Airflow
 
 ## Exercise: Creating a Basic DAG with Python and Bash Operators
 
