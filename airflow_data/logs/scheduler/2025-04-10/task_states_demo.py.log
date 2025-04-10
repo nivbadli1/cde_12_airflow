@@ -1,0 +1,8 @@
+[2025-04-10T14:27:15.478+0000] {processor.py:161} INFO - Started process (PID=6603) to work on /opt/airflow/dags/task_states_demo.py
+[2025-04-10T14:27:15.481+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/task_states_demo.py for tasks to queue
+[2025-04-10T14:27:15.487+0000] {logging_mixin.py:188} INFO - [2025-04-10T14:27:15.483+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/task_states_demo.py
+[2025-04-10T14:27:15.543+0000] {logging_mixin.py:188} WARNING - /home/airflow/.local/lib/python3.8/site-packages/airflow/operators/bash.py:152 RemovedInAirflow3Warning: none_failed_or_skipped Trigger Rule is deprecated. Please use `none_failed_min_one_success`.
+[2025-04-10T14:27:15.545+0000] {processor.py:840} INFO - DAG(s) 'task_states_demo' retrieved from /opt/airflow/dags/task_states_demo.py
+[2025-04-10T14:27:15.580+0000] {logging_mixin.py:188} INFO - [2025-04-10T14:27:15.579+0000] {dag.py:3047} INFO - Sync 1 DAGs
+[2025-04-10T14:27:15.614+0000] {logging_mixin.py:188} INFO - [2025-04-10T14:27:15.614+0000] {dag.py:3834} INFO - Setting next_dagrun for task_states_demo to 2025-04-10 00:00:00+00:00, run_after=2025-04-11 00:00:00+00:00
+[2025-04-10T14:27:15.629+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/task_states_demo.py took 0.162 seconds

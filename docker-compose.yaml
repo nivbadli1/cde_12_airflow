@@ -50,7 +50,7 @@ x-airflow-common:
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
   image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.8.4}
-  # build: .
+  build: .
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
@@ -280,6 +280,51 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+
+  # elasticsearch:
+  #     container_name: elasticsearch
+  #     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+  #     ports:
+  #         - "9200:9200"
+  #     environment:
+  #         discovery.type: single-node
+          
+  # kibana:
+  #     container_name: kibana
+  #     image: docker.elastic.co/kibana/kibana:7.13.2
+  #     ports:
+  #         - "5601:5601"
+  #     depends_on:
+  #         - elasticsearch
+
+
+  # zookeeper:
+  #   container_name: zookeeper
+  #   image: wurstmeister/zookeeper:latest
+  #   ports:
+  #       - "2181:2181"
+
+  # course-kafka:
+  #   container_name: course-kafka
+  #   image: wurstmeister/kafka:2.13-2.8.1
+  #   environment:
+  #       KAFKA_ADVERTISED_HOST_NAME: course-kafka
+  #       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #   ports:
+  #       - "9092:9092"
+  #   depends_on:
+  #       - zookeeper
+
+  # kafdrop:
+  #   container_name: kafdrop
+  #   image: obsidiandynamics/kafdrop:3.30.0
+  #   ports:
+  #       - "9003:9000"
+  #   environment:
+  #       - KAFKA_BROKERCONNECT=course-kafka:9092
+  #   depends_on:
+  #       - course-kafka
+
 
 volumes:
   postgres-db-volume:
