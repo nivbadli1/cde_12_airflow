@@ -1,1 +1,3 @@
 ./airflow_data/logs
+.DS_Store
+*.log
