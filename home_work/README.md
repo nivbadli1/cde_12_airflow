@@ -8,6 +8,8 @@ Three exercises, each a little harder than the last. In each one you build a com
 | 2 | Weather sensors, 3 cities | Intermediate | Parallel tasks, data-quality checks, failures and `upstream_failed`, `trigger_rule` |
 | 3 | Shipments, "production-style" pipeline | Challenging | Retries, quality gate, reject file, idempotency, notify and cleanup that always run |
 
+**Warm-up (optional, about 20 minutes):** [CLI practice](cli_practice.md) - run, test and inspect DAGs from the terminal. Solutions: [solutions/cli_practice_solution.md](solutions/cli_practice_solution.md).
+
 ---
 
 ## Setup (once)
