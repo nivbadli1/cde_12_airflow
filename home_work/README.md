@@ -1,14 +1,15 @@
-# Airflow Practice: Three Real-World Pipelines
+# Airflow Practice: Four Real-World Exercises
 
-Three exercises, each a little harder than the last. In each one you build a complete DAG, end to end, on "dirty" data like the data you get at work.
+Four exercises. In exercises 1-3 you build a complete DAG, end to end, on "dirty" data like the data you get at work. In exercise 4 you write a Python script that operates Airflow from the command line.
 
 | # | Topic | Level | What you practice |
 |---|-------|-------|-------------------|
 | 1 | Support tickets (ETL) | Basic | `PythonOperator`, XCom, Variables, data cleaning |
 | 2 | Weather sensors, 3 cities | Intermediate | Parallel tasks, data-quality checks, failures and `upstream_failed`, `trigger_rule` |
 | 3 | Shipments, "production-style" pipeline | Challenging | Retries, quality gate, reject file, idempotency, notify and cleanup that always run |
+| 4 | Operate Airflow from a Python script | Intermediate | The `airflow` CLI from `subprocess`, polling a run, exit codes, Variables from the CLI |
 
-**Warm-up (optional, about 20 minutes):** [CLI practice](cli_practice.md) - run, test and inspect DAGs from the terminal. Solutions: [solutions/cli_practice_solution.md](solutions/cli_practice_solution.md).
+**Warm-up (optional, about 20 minutes):** [CLI practice](cli_practice.md) - run, test and inspect DAGs from the terminal. Solutions: [solutions/cli_practice_solution.md](solutions/cli_practice_solution.md). Do it before Exercise 4.
 
 ---
 
@@ -24,7 +25,7 @@ Three exercises, each a little harder than the last. In each one you build a com
 3. Write each DAG as a `.py` file in `airflow_data/dags/`. It shows up in the UI within about 30 seconds.
 4. Create Variables in the UI: **Admin → Variables → +**.
 
-### Rules for all exercises
+### Rules for exercises 1-3
 
 - Use `with DAG(...)` and `PythonOperator`.
 - **Pass file paths between tasks through XCom, not tables.** This is how it is done in real projects. XCom is for small values.
@@ -200,6 +201,81 @@ Settings: `retries=2`, `retry_delay` = 20 seconds.
 - "Atomic" writing: write to a temporary file `...tmp`, then `os.replace(tmp, final)`. This way nobody reads a half-written file.
 - The list of failures in `notify`: add a parameter `dag_run` to the function, then use `dag_run.get_task_instances()` and check `t.state`.
 - `Variable.set("name", value)` to save a value.
+
+---
+
+## Exercise 4: Operate Airflow from a Python script (intermediate)
+
+### The story
+The data team wants a "morning health check": a script that starts the nightly pipeline, waits for it to finish and **tells the outside world if it worked** (exit code `0` or not). That is how cron jobs, CI systems and other scripts use Airflow, with no browser involved. You will build that script with the `airflow` command line.
+
+### What you get
+- The DAG `nightly_report` (file `airflow_data/dags/nightly_report.py`, you do not write it): `extract >> transform >> load`, no schedule.
+  It fails on purpose when the Variable `fail_mode` is `on`.
+- A starter script: `home_work/exercise_4_starter/run_and_check.py`. The helpers are written, the TODOs are yours.
+
+### Setup
+```bash
+git pull
+cp home_work/exercise_4_starter/run_and_check.py target_data/run_and_check.py
+```
+Wait about 30 seconds and check that `nightly_report` is in the UI. Edit the copy in `target_data/`. Inside the containers it is `/tmp/target_data/run_and_check.py`.
+Do **not** put the script in `airflow_data/dags/`: Airflow would try to read it as a DAG.
+
+### Part A: Explore by hand first (5 minutes)
+Open a shell (`docker compose exec airflow-scheduler bash`) and try, in this order, the commands your script will run:
+```bash
+airflow dags list -o json
+airflow dags list-import-errors
+airflow dags unpause nightly_report
+airflow dags trigger nightly_report --run-id my_first_run
+airflow dags list-runs -d nightly_report -o json
+airflow tasks states-for-dag-run nightly_report my_first_run -o json
+```
+Look at the output of each one: this is what your script has to read.
+
+### Part B: Write the script
+Fill in the TODOs in `run_and_check.py`. The script must:
+
+1. Stop with exit code **2** if the DAG does not exist, or if a DAG file has an import error.
+2. Unpause and trigger the DAG with your **own run id**, and print it.
+3. **Poll** every few seconds until the run is `success` or `failed`. If it takes longer than `--timeout` seconds, stop with exit code **3**.
+4. Print the state of the run and of **every task**.
+5. Exit with **0** if the run succeeded and **1** if it failed.
+
+Run it inside the container:
+```bash
+docker compose exec airflow-scheduler python /tmp/target_data/run_and_check.py
+echo $?
+```
+
+### How to know you succeeded
+Run the script three times and compare the output and the exit code (`echo $?`):
+
+| Experiment | How | Expected |
+|---|---|---|
+| 1. Normal | `airflow variables set fail_mode off` | All three tasks `success`, exit code `0` |
+| 2. Failure | `airflow variables set fail_mode on` | `transform` is `failed`, `load` is `upstream_failed`, exit code `1` |
+| 3. Wrong DAG | `... run_and_check.py --dag-id nope` | An error message, exit code `2` |
+
+When you finish, delete the Variable (`airflow variables delete fail_mode`) so the DAG goes back to normal.
+
+### Questions to answer in your notebook
+- Why does the script use its own `--run-id` instead of reading the id that `trigger` prints?
+- In experiment 2, why is `load` in the state `upstream_failed` and not `failed`?
+- Why is a **non-zero exit code** more useful to a cron job than a printed message?
+
+### Hints
+- `subprocess.run([...], capture_output=True, text=True)` is already wrapped for you in `airflow(...)`.
+- Always use `-o json` when you want to read the output in Python: `json.loads` is much safer than cutting text.
+- `list-runs` returns **all** runs of the DAG. Pick yours by `run_id`.
+- `time.sleep(poll)` between checks, and compare `time.time()` with a deadline for the timeout.
+
+### Bonus
+- Add an argument `--conf '{"key": "value"}'` that is passed to `airflow dags trigger --conf`.
+- Make the script print how long the run took (`start_date` and `end_date` are in the `list-runs` output).
+
+Solution (try on your own first): [`solutions/solution_ex4_run_and_check.py`](solutions/solution_ex4_run_and_check.py)
 
 ---
 
